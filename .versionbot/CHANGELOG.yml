@@ -1,0 +1,17 @@
+- commits:
+    - subject: Add Flowzone CI and repo metadata
+      hash: 83a50491cbf8bb906a275e365c614995c051d69c
+      body: |
+        Add the Flowzone workflow with a cross-platform test matrix that
+        exercises the action against a real GitHub App key, the composite test
+        action it calls, and repo.yml.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 0.0.2
+  title: ""
+  date: 2026-06-23T16:14:23.877Z
