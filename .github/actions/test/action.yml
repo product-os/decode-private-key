@@ -1,0 +1,37 @@
+# https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+name: "Test setup of balena CLI"
+description: "Test setup of balena CLI composite action"
+# this inputs are always provided by flowzone, so they must always be defined on the composite action
+inputs:
+  json:
+    description: "JSON stringified object containing all the inputs from the calling workflow"
+    required: true
+  secrets:
+    description: "JSON stringified object containing all the secrets from the calling workflow"
+    required: true
+  variables:
+    description: "JSON stringified object containing all the variables from the calling workflow"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Decode private key
+      uses: ./
+      id: decode
+      with:
+        secret: ${{ fromJSON(inputs.secrets).FLOWZONE_APP_PRIVATE_KEY }}
+
+    - name: Create installation token
+      uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+      id: app-token
+      with:
+        client-id: ${{ fromJSON(inputs.variables).FLOWZONE_APP_ID }}
+        private-key: ${{ steps.decode.outputs.private-key }}
+        owner: ${{ github.repository_owner }}
+        repositories: ${{ github.repository }}
+
+    - name: Use the token
+      shell: bash
+      run: gh repo list
+      env:
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
