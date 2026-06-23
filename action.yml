@@ -46,13 +46,14 @@ runs:
             echo "::error::Failed to base64 decode private key. Verify the value is valid base64."
             exit 1
           fi
+          echo "Decoded private key from base64 input -- adding mask to prevent accidental exposure in logs"
           while IFS= read -r line; do
             [[ -n "$line" ]] && echo "::add-mask::$line"
           done <<< "${private_key}"
         fi
 
         if [[ "${private_key}" != *"-----BEGIN"* ]]; then
-          echo "::error::Decoded private key does not look like a PEM key (missing -----BEGIN header). Check secret encoding."
+          echo "::error::Decoded private key does not look like a PEM key (missing -----BEGIN header). Check encoding."
           exit 1
         fi
 
